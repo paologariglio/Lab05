@@ -37,7 +37,11 @@ def main(page: ft.Page):
 
     # Tutti i TextField per le info necessarie per aggiungere un nuovo strumento (tipo, marca, anno, contatore posti)
     # TODO
-
+    txt_nuovo_strumento = ft.Text("Aggiungi nuovo strumento",size=20)
+    input_tipo = ft.TextField(label="Responsabile")
+    input_marca = ft.TextField(label="Marca")
+    input_anno = ft.TextField(label="Anno")
+    input_valore = ft.TextField(label="Valore")
     # --- FUNZIONI APP ---
     def aggiorna_lista_strumenti():
         lista_strumenti.controls.clear()
@@ -63,7 +67,9 @@ def main(page: ft.Page):
 
     # Pulsanti per la gestione dell'inserimento di un nuovo strumento
     # TODO
-
+    btn_aggiungi = ft.CupertinoButton("Aggiungi strumento", on_click=aggiorna_lista_strumenti)
+    btn_meno = ft.CupertinoButton("-", color = "Red") #on_clcik = meno)
+    btn_piu = ft.CupertinoButton("+", color = "Green") #on_click = piu)
     # --- LAYOUT ---
     page.add(
         toggle_cambia_tema,
@@ -81,7 +87,11 @@ def main(page: ft.Page):
 
         # Sezione 3
         # TODO
-
+        txt_nuovo_strumento,
+        ft.Row(spacing=20,
+               controls=[input_tipo, input_marca, input_anno, btn_meno, input_valore, btn_piu],
+               alignment=ft.MainAxisAlignment.CENTER),
+        btn_aggiungi,
         # Sezione 4
         ft.Divider(),
         ft.Text("Strumenti", size=20),
