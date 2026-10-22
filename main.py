@@ -38,7 +38,7 @@ def main(page: ft.Page):
     # Tutti i TextField per le info necessarie per aggiungere un nuovo strumento (tipo, marca, anno, contatore posti)
     # TODO
     txt_nuovo_strumento = ft.Text("Aggiungi nuovo strumento",size=20)
-    input_tipo = ft.TextField(label="Responsabile")
+    input_tipo = ft.TextField(label="Tipo")
     input_marca = ft.TextField(label="Marca")
     input_anno = ft.TextField(label="Anno")
     input_valore = ft.TextField(label="Valore")
@@ -60,6 +60,46 @@ def main(page: ft.Page):
 
     # Handlers per la gestione dei pulsanti utili all'inserimento di un nuovo strumento
     # TODO
+    def aggiungi_strumento(e):
+        tipo = input_tipo.value.strip()
+        marca = input_marca.value.strip()
+        anno = input_anno.value.strip()
+        valore = input_valore.value.strip()
+        if not tipo or not marca or not anno or not valore:
+            alert.show_alert("Tutti i campi vanno compilati")
+            return
+
+        try:
+            anno_num = int(anno)
+            valore_num = float(valore)
+
+        except ValueError:
+            alert.show_alert("Anno o valore non valido")
+            return
+        deposito.aggiungi_strumento(tipo, marca, anno_num, valore_num)
+        input_tipo.value = ""
+        input_marca.value = ""
+        input_anno.value = ""
+        input_valore.value = "0"
+        aggiorna_lista_strumenti()
+    def piu(e):
+        try:
+            val_attuale = int(input_valore.value)
+            input_valore.value = str(val_attuale+1)
+            page.update()
+        except ValueError:
+            alert.show_alert(f"Inserisci un numero valido")
+    def meno(e):
+        try:
+            val_attuale = int(input_valore.value)
+            if val_attuale >=1:
+                input_valore.value = str(val_attuale-1)
+                page.update()
+            else:
+                alert.show_alert(f"Inserisci un numero maggiore di 0")
+        except ValueError:
+            alert.show_alert(f"Inserisci un numero valido")
+
 
     # --- EVENTI ---
     toggle_cambia_tema = ft.Switch(label="Tema scuro", value=True, on_change=cambia_tema)
@@ -67,9 +107,9 @@ def main(page: ft.Page):
 
     # Pulsanti per la gestione dell'inserimento di un nuovo strumento
     # TODO
-    btn_aggiungi = ft.CupertinoButton("Aggiungi strumento", on_click=aggiorna_lista_strumenti)
-    btn_meno = ft.CupertinoButton("-", color = "Red") #on_clcik = meno)
-    btn_piu = ft.CupertinoButton("+", color = "Green") #on_click = piu)
+    btn_aggiungi = ft.CupertinoButton("Aggiungi strumento", on_click=aggiungi_strumento)
+    btn_meno = ft.CupertinoButton("-", color = "Red", on_click = meno)
+    btn_piu = ft.CupertinoButton("+", color = "Green", on_click = piu)
     # --- LAYOUT ---
     page.add(
         toggle_cambia_tema,
@@ -87,6 +127,7 @@ def main(page: ft.Page):
 
         # Sezione 3
         # TODO
+        ft.Divider(),
         txt_nuovo_strumento,
         ft.Row(spacing=20,
                controls=[input_tipo, input_marca, input_anno, btn_meno, input_valore, btn_piu],
